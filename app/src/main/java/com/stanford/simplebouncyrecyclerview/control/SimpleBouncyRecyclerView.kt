@@ -12,8 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
-import androidx.core.animation.doOnCancel
-import androidx.core.animation.doOnEnd
+import androidx.core.animation.addListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,11 +38,12 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
                 invalidate()
             }
         }
+        layoutManager = _layoutManager
 
         _itemDecoration = SimpleBouncyOverscrollItemDecoration(context, attrs, _layoutManager)
-
         addItemDecoration(_itemDecoration)
-        layoutManager = _layoutManager
+
+        overScrollMode = View.OVER_SCROLL_NEVER
     }
 
     var startIndexOffset: Int
@@ -266,22 +266,8 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
         _bounceBackAnimator = ValueAnimator.ofFloat(_overscrollTotal.toFloat(), 0f)
         _bounceBackAnimator!!.interpolator = _bounceInterpolator
         _bounceBackAnimator!!.duration = (_animDuration * (1.0f / strength)).toLong()
-        _bounceBackAnimator!!.addUpdateListener {
-            it?.let {
-                bounceBackUpdate(it.animatedValue as Float)
-
-            }
-        }
-        _bounceBackAnimator!!.doOnEnd {
-            it.let {
-                bounceBackEnded()
-            }
-        }
-        _bounceBackAnimator!!.doOnCancel {
-            it.let {
-                bounceBackEnded()
-            }
-        }
+        _bounceBackAnimator!!.addUpdateListener { bounceBackUpdate(it.animatedValue as Float) }
+        _bounceBackAnimator!!.addListener(onEnd = { bounceBackEnded() }, onCancel = { bounceBackEnded() })
         _bounceBackAnimator!!.start()
 
     }
@@ -328,9 +314,7 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
     private fun clearAnimations() {
         if (_bounceBackAnimator != null) {
             _bounceBackAnimator!!.removeAllUpdateListeners()
-            _bounceBackAnimator!!.removeAllUpdateListeners()
-            _bounceBackAnimator!!.doOnEnd {  }
-            _bounceBackAnimator!!.doOnCancel {  }
+            _bounceBackAnimator!!.removeAllListeners()
             _bounceBackAnimator!!.cancel()
             _bounceBackAnimator = null
         }

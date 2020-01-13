@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         _recyclerView.apply {
 
-            layoutManager = LinearLayoutManager(context)
+//            layoutManager = LinearLayoutManager(context)
             adapter = ListAdapter(_cageMovies)
 
         }
