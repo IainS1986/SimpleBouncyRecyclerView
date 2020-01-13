@@ -11,7 +11,6 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.BaseInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
@@ -35,11 +34,11 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
 
     init {
         _layoutManager = SimpleBouncyLayoutManager(context, attrs, 0, 0)
-//        _layoutManager.onOverscroll = {
-//            if (animated) {
-//                invalidate()
-//            }
-//        }
+        _layoutManager.onOverscroll = {
+            if (it) {
+                invalidate()
+            }
+        }
 
         _itemDecoration = SimpleBouncyOverscrollItemDecoration(context, attrs, _layoutManager)
 
@@ -134,6 +133,8 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
     val isVertical: Boolean
         get() = orientation == 1
 
+    var onOverscroll: (animating: Boolean) -> Unit = {}
+
     init {
         val displayMetrics = DisplayMetrics()
         val windowManager: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -142,7 +143,7 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
         _maxOverscroll = if (isVertical) displayMetrics.heightPixels.toDouble() / 4 else displayMetrics.widthPixels.toDouble() / 3
 
         if (attrs != null) {
-            val a = context!!.obtainStyledAttributes(attrs, R.styleable.bouncy_scroller)
+            val a = context.obtainStyledAttributes(attrs, R.styleable.bouncy_scroller)
 
             tension = a.getFloat(R.styleable.bouncy_scroller_tension, tension)
             strength = a.getFloat(R.styleable.bouncy_scroller_strength, strength)
@@ -202,7 +203,7 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
             }
         }
 
-        var scrollRange = 0
+        var scrollRange: Int
 
         if (isVertical) {
             scrollRange = super.scrollVerticallyBy(toScroll, recycler, state)
@@ -244,7 +245,7 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
 
         // Fire event to notify anything that cares that the cells
         // have just translated
-//        onOverscroll.invoke(this, animating)
+        onOverscroll(animating)
     }
 
     private fun translateCell(index: Int) {
@@ -272,12 +273,12 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
             }
         }
         _bounceBackAnimator!!.doOnEnd {
-            it?.let {
+            it.let {
                 bounceBackEnded()
             }
         }
         _bounceBackAnimator!!.doOnCancel {
-            it?.let {
+            it.let {
                 bounceBackEnded()
             }
         }
