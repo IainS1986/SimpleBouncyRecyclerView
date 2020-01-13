@@ -1,87 +1,21 @@
-package com.stanford.simplebouncyrecyclerview.control
+package com.stanford.simplebouncyrecyclerview.control.layoutmanagers
 
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.addListener
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stanford.simplebouncyrecyclerview.R
-
-enum class BouncyState { UP, DOWN }
+import com.stanford.simplebouncyrecyclerview.control.BouncyState
 
 // This is the anim duration time to bounce back and it multiplied by the strength
 private const val _animDuration: Int = 300
-
-class SimpleBouncyRecyclerView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAtr: Int = 0) : RecyclerView(context, attrs, defStyleAtr) {
-
-    private var _layoutManager: SimpleBouncyLayoutManager
-    private var _itemDecoration: SimpleBouncyOverscrollItemDecoration
-
-    init {
-        _layoutManager = SimpleBouncyLayoutManager(context, attrs, 0, 0)
-        _layoutManager.onOverscroll = {
-            if (it) {
-                invalidate()
-            }
-        }
-        layoutManager = _layoutManager
-
-        _itemDecoration = SimpleBouncyOverscrollItemDecoration(context, attrs, _layoutManager)
-        addItemDecoration(_itemDecoration)
-
-        overScrollMode = View.OVER_SCROLL_NEVER
-    }
-
-    var startIndexOffset: Int
-        get() = _layoutManager.startIndexOffset
-        set(value) {
-            _layoutManager.startIndexOffset = value
-        }
-
-    var endIndexOffset: Int
-        get() = _layoutManager.endIndexOffset
-        set(value) {
-            _layoutManager.endIndexOffset = value
-        }
-
-    var startOverscrollColor: Int
-        get() = _itemDecoration.startOverscrollColor
-        set(value) {
-            _itemDecoration.startOverscrollColor = value
-        }
-
-    var endOverscrollColor: Int
-        get() = _itemDecoration.endOverscrollColor
-        set(value) {
-            _itemDecoration.endOverscrollColor = value
-        }
-
-    override fun onTouchEvent(e: MotionEvent?): Boolean {
-
-        when (e?.action) {
-            MotionEvent.ACTION_UP -> _layoutManager.setState(BouncyState.UP)
-            MotionEvent.ACTION_CANCEL -> _layoutManager.setState(BouncyState.UP)
-            MotionEvent.ACTION_DOWN -> _layoutManager.setState(BouncyState.DOWN)
-            MotionEvent.ACTION_MOVE -> _layoutManager.setState(BouncyState.DOWN)
-        }
-
-        return super.onTouchEvent(e)
-    }
-}
 
 class SimpleBouncyLayoutManager @JvmOverloads constructor(
     context: Context,
@@ -145,10 +79,10 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.bouncy_scroller)
 
-            tension = a.getFloat(R.styleable.bouncy_scroller_tension, tension)
-            strength = a.getFloat(R.styleable.bouncy_scroller_strength, strength)
-            startIndexOffset = a.getInt(R.styleable.bouncy_scroller_startIndexOffset, startIndexOffset)
-            endIndexOffset = a.getInt(R.styleable.bouncy_scroller_endIndexOffset, endIndexOffset)
+            _tension = a.getFloat(R.styleable.bouncy_scroller_tension, _tension)
+            _strength = a.getFloat(R.styleable.bouncy_scroller_strength, _strength)
+            _startIndexOffset = a.getInt(R.styleable.bouncy_scroller_startIndexOffset, _startIndexOffset)
+            _endIndexOffset = a.getInt(R.styleable.bouncy_scroller_endIndexOffset, _endIndexOffset)
 
             a.recycle()
         }
@@ -174,11 +108,11 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
 
     fun setState(state: BouncyState) {
         if (_currentState == BouncyState.DOWN &&
-                state == BouncyState.UP) {
+            state == BouncyState.UP) {
             bounceBack()
         }
         else if (_currentState == BouncyState.UP &&
-                state == BouncyState.DOWN) {
+            state == BouncyState.DOWN) {
             clearAnimations()
         }
         _currentState = state
@@ -282,13 +216,13 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
     }
 
     private fun overcrollStart() {
-        for ( i in startIndexOffset until childCount) {
+        for ( i in _startIndexOffset until childCount) {
             translateCell(i)
         }
     }
 
     private fun overscrollEnd() {
-        for ( i in (childCount - endIndexOffset - 1) downTo 0) {
+        for ( i in (childCount - _endIndexOffset - 1) downTo 0) {
             translateCell(i)
         }
     }
@@ -326,76 +260,5 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
         }
 
         return null
-    }
-}
-
-class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: AttributeSet?, layoutManager: SimpleBouncyLayoutManager) :
-    DividerItemDecoration(context, layoutManager.orientation) {
-
-    private var _paint: Paint = Paint()
-
-    private var _layoutManager: SimpleBouncyLayoutManager = layoutManager
-
-    var startOverscrollColor: Int = Color.TRANSPARENT
-
-    var endOverscrollColor: Int = Color.TRANSPARENT
-
-    init {
-        if (attrs != null) {
-            val a = context!!.obtainStyledAttributes(attrs, R.styleable.bouncy_scroller)
-
-            startOverscrollColor = a.getColor(R.styleable.bouncy_scroller_startOverscrollColor, startOverscrollColor)
-            endOverscrollColor = a.getColor(R.styleable.bouncy_scroller_endOverscrollColor, endOverscrollColor)
-
-            a.recycle()
-        }
-    }
-
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-
-        if (kotlin.math.abs(_layoutManager.overscrollTotal) > Double.MIN_VALUE)
-        {
-            if (_layoutManager.overscrollTotal < 0 && startOverscrollColor != Color.TRANSPARENT)
-            {
-                // Get the child we render after
-                var childAfter = parent.getChildAt(_layoutManager.startIndexOffset)
-                // Render region after
-                _paint.color = startOverscrollColor
-                drawOverscrollRegion(c, childAfter, true)
-            }
-            else if (_layoutManager.overscrollTotal > 0 && endOverscrollColor != Color.TRANSPARENT)
-            {
-                // Get the child we render before
-                var childBefore = parent.getChildAt(parent.childCount - _layoutManager.endIndexOffset - 1)
-                // Render region
-                _paint.color = endOverscrollColor
-                drawOverscrollRegion(c, childBefore, false)
-
-            }
-        }
-    }
-
-    private fun drawOverscrollRegion(c: Canvas?, child: View?, start: Boolean){
-
-        if (child == null || c == null) {
-            return
-        }
-
-        // Set baseline to be the canvase size, we will then resize based on orientation, start/end and child position
-        var x = 0f
-        var y = 0f
-        var w = c.width.toFloat()
-        var h = c.height.toFloat()
-
-        // Figure out the Width/Height to expand by
-        if (_layoutManager.isVertical) {
-            y = if (start) child.y- child.translationY else child.y+ child.measuredHeight
-            h = kotlin.math.abs(child.translationY)
-        } else {
-            x = if (start) child.x - child.translationX else child.x + child.measuredWidth
-            w = kotlin.math.abs(child.translationX)
-        }
-
-        c.drawRect(x, y, x + w, y + h, _paint)
     }
 }

@@ -7,10 +7,12 @@
     tools:context=".MainActivity">
 
 <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <com.stanford.simplebouncyrecyclerview.control.SimpleBouncyRecyclerView
+    <com.stanford.simplebouncyrecyclerview.control.views.SimpleBouncyRecyclerView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:startOverscrollColor="#FF0000"
+        app:startIndexOffset="1"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
