@@ -17,6 +17,8 @@ import com.stanford.simplebouncyrecyclerview.control.BouncyState
 // This is the anim duration time to bounce back and it multiplied by the strength
 private const val _animDuration: Int = 300
 
+typealias OverscrollEvent = (animating: Boolean) -> Unit
+
 class SimpleBouncyLayoutManager @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -67,7 +69,7 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
     val isVertical: Boolean
         get() = orientation == 1
 
-    var onOverscroll: (animating: Boolean) -> Unit = {}
+    private var onOverscrollEvents: MutableList<OverscrollEvent> = mutableListOf()
 
     init {
         val displayMetrics = DisplayMetrics()
@@ -116,6 +118,16 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
             clearAnimations()
         }
         _currentState = state
+    }
+
+    fun registerOnOverscrollEvent(event: OverscrollEvent) {
+        if (!onOverscrollEvents.contains(event)) {
+            onOverscrollEvents.add(event)
+        }
+    }
+
+    fun unregisterOnOverscrollEvent(event: OverscrollEvent) {
+        onOverscrollEvents.remove(event)
     }
 
     private fun handleScroll(delta: Int, recycler: RecyclerView.Recycler?, state: RecyclerView.State?): Int {
@@ -179,7 +191,9 @@ class SimpleBouncyLayoutManager @JvmOverloads constructor(
 
         // Fire event to notify anything that cares that the cells
         // have just translated
-        onOverscroll(animating)
+        for (event in onOverscrollEvents) {
+            event(animating)
+        }
     }
 
     private fun translateCell(index: Int) {

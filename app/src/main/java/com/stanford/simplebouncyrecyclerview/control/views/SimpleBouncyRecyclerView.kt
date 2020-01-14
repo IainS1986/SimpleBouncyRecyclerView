@@ -19,7 +19,7 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
 
     init {
         _layoutManager = SimpleBouncyLayoutManager(context, attrs, 0, 0)
-        _layoutManager.onOverscroll = {
+        _layoutManager.registerOnOverscrollEvent {
             if (it) {
                 invalidate()
             }
