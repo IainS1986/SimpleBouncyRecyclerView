@@ -1,4 +1,4 @@
-package com.stanford.simplebouncyrecyclerview.control.itemdecorations
+package com.stanford.simplebouncyrecycler.itemdecorations
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,8 +8,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.stanford.simplebouncyrecyclerview.R
-import com.stanford.simplebouncyrecyclerview.control.layoutmanagers.SimpleBouncyLayoutManager
+import com.stanford.simplebouncyrecycler.R
+import com.stanford.simplebouncyrecycler.layoutmanagers.SimpleBouncyLayoutManager
 
 class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: AttributeSet?, layoutManager: SimpleBouncyLayoutManager) :
     DividerItemDecoration(context, layoutManager.orientation) {

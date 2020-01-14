@@ -1,13 +1,13 @@
-package com.stanford.simplebouncyrecyclerview.control.views
+package com.stanford.simplebouncyrecycler.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.stanford.simplebouncyrecyclerview.control.BouncyState
-import com.stanford.simplebouncyrecyclerview.control.itemdecorations.SimpleBouncyOverscrollItemDecoration
-import com.stanford.simplebouncyrecyclerview.control.layoutmanagers.SimpleBouncyLayoutManager
+import com.stanford.simplebouncyrecycler.BouncyState
+import com.stanford.simplebouncyrecycler.itemdecorations.SimpleBouncyOverscrollItemDecoration
+import com.stanford.simplebouncyrecycler.layoutmanagers.SimpleBouncyLayoutManager
 
 class SimpleBouncyRecyclerView @JvmOverloads constructor(
     context: Context,
@@ -18,7 +18,13 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
     private var _itemDecoration: SimpleBouncyOverscrollItemDecoration
 
     init {
-        _layoutManager = SimpleBouncyLayoutManager(context, attrs, 0, 0)
+        _layoutManager =
+            SimpleBouncyLayoutManager(
+                context,
+                attrs,
+                0,
+                0
+            )
         _layoutManager.registerOnOverscrollEvent {
             if (it) {
                 invalidate()
@@ -26,7 +32,12 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
         }
         layoutManager = _layoutManager
 
-        _itemDecoration = SimpleBouncyOverscrollItemDecoration(context, attrs, _layoutManager)
+        _itemDecoration =
+            SimpleBouncyOverscrollItemDecoration(
+                context,
+                attrs,
+                _layoutManager
+            )
         addItemDecoration(_itemDecoration)
 
         overScrollMode = View.OVER_SCROLL_NEVER

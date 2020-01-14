@@ -1,4 +1,4 @@
-package com.stanford.simplebouncyrecyclerview.control.layoutmanagers
+package com.stanford.simplebouncyrecycler.layoutmanagers
 
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
@@ -11,8 +11,8 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.addListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.stanford.simplebouncyrecyclerview.R
-import com.stanford.simplebouncyrecyclerview.control.BouncyState
+import com.stanford.simplebouncyrecycler.R
+import com.stanford.simplebouncyrecycler.BouncyState
 
 // This is the anim duration time to bounce back and it multiplied by the strength
 private const val _animDuration: Int = 300
