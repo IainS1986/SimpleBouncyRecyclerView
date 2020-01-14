@@ -19,7 +19,7 @@ private const val _animDuration: Int = 300
 
 typealias OverscrollEvent = (animating: Boolean) -> Unit
 
-class SimpleBouncyLayoutManager @JvmOverloads constructor(
+internal class SimpleBouncyLayoutManager @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAtr: Int = 0,

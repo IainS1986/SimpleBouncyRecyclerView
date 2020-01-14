@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stanford.simplebouncyrecycler.R
 import com.stanford.simplebouncyrecycler.layoutmanagers.SimpleBouncyLayoutManager
 
-class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: AttributeSet?, layoutManager: SimpleBouncyLayoutManager) :
+internal class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: AttributeSet?, layoutManager: SimpleBouncyLayoutManager) :
     DividerItemDecoration(context, layoutManager.orientation) {
 
     private var _paint: Paint = Paint()

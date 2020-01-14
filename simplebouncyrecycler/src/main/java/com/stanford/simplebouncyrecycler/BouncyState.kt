@@ -1,3 +1,3 @@
 package com.stanford.simplebouncyrecycler
 
-enum class BouncyState { UP, DOWN }
+internal enum class BouncyState { UP, DOWN }

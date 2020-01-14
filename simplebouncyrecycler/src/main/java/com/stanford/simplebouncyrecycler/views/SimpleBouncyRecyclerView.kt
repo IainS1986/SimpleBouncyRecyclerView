@@ -9,12 +9,15 @@ import com.stanford.simplebouncyrecycler.BouncyState
 import com.stanford.simplebouncyrecycler.itemdecorations.SimpleBouncyOverscrollItemDecoration
 import com.stanford.simplebouncyrecycler.layoutmanagers.SimpleBouncyLayoutManager
 
+typealias OverscrollEvent = (animating: Boolean) -> Unit
+
 class SimpleBouncyRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAtr: Int = 0) : RecyclerView(context, attrs, defStyleAtr) {
 
     private var _layoutManager: SimpleBouncyLayoutManager
+
     private var _itemDecoration: SimpleBouncyOverscrollItemDecoration
 
     init {
@@ -43,6 +46,18 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
         overScrollMode = View.OVER_SCROLL_NEVER
     }
 
+    var startOverscrollColor: Int
+        get() = _itemDecoration.startOverscrollColor
+        set(value) {
+            _itemDecoration.startOverscrollColor = value
+        }
+
+    var endOverscrollColor: Int
+        get() = _itemDecoration.endOverscrollColor
+        set(value) {
+            _itemDecoration.endOverscrollColor = value
+        }
+
     var startIndexOffset: Int
         get() = _layoutManager.startIndexOffset
         set(value) {
@@ -55,17 +70,25 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
             _layoutManager.endIndexOffset = value
         }
 
-    var startOverscrollColor: Int
-        get() = _itemDecoration.startOverscrollColor
+    var strength: Float
+        get() = _layoutManager.strength
         set(value) {
-            _itemDecoration.startOverscrollColor = value
+            _layoutManager.strength = value
         }
 
-    var endOverscrollColor: Int
-        get() = _itemDecoration.endOverscrollColor
+    var tension: Float
+        get() = _layoutManager.tension
         set(value) {
-            _itemDecoration.endOverscrollColor = value
+            _layoutManager.tension = value
         }
+
+    fun registerOnOverscrollEvent(event: OverscrollEvent) {
+        _layoutManager.registerOnOverscrollEvent(event)
+    }
+
+    fun unregisterOnOverscrollEvent(event: OverscrollEvent) {
+        _layoutManager.unregisterOnOverscrollEvent(event)
+    }
 
     override fun onTouchEvent(e: MotionEvent?): Boolean {
 
