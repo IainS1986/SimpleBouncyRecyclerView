@@ -3,19 +3,29 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+ext {
+    keystorePath = properties.getProperty("keystore.path")
+    keystoreKeyAlias = properties.getProperty("keystore.keyalias")
+    keystoreStorePwd = properties.getProperty("keystore.storepassword")
+    keystoreKeyPwd = properties.getProperty("keystore.keypassword")
+}
+
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/iain.stanford/Dev/Keystores/stanford-keystore')
-            storePassword 'wfP3pvp7fRK6'
-            keyAlias = 'stanford'
-            keyPassword 'wfP3pvp7fRK6'
+            storeFile file(keystorePath)
+            storePassword keystoreStorePwd
+            keyAlias = keystoreKeyAlias
+            keyPassword keystoreKeyPwd
         }
         release {
-            storeFile file('/Users/iain.stanford/Dev/Keystores/stanford-keystore')
-            storePassword 'wfP3pvp7fRK6'
-            keyPassword 'wfP3pvp7fRK6'
-            keyAlias = 'stanford'
+            storeFile file(keystorePath)
+            storePassword keystoreStorePwd
+            keyPassword keystoreKeyPwd
+            keyAlias = keystoreKeyAlias
         }
     }
     compileSdkVersion 29

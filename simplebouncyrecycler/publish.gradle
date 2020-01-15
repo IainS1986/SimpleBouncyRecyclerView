@@ -12,7 +12,7 @@ ext {
     issueUrl = 'https://github.com/IainS1986/SimpleBouncyRecyclerView/issues'
     gitUrl = 'https://github.com/IainS1986/SimpleBouncyRecyclerView.git'
 
-    libraryVersion = '0.0.1'
+    libraryVersion = '0.0.2'
 
     developerId = 'iains1986'
     developerName = 'Iain Stanford'
@@ -26,16 +26,16 @@ ext {
 // Maven
 apply plugin: 'com.github.dcendents.android-maven'
 
-android.libraryVariants.all { variant ->
-    def name = variant.buildType.name.capitalize()
-    def task = project.tasks.create "jar${name}", Jar
-    task.dependsOn variant.javaCompiler
-    task.from variant.javaCompiler.destinationDir
-    task.exclude '**/BuildConfig.class'
-    task.exclude '**/R.class'
-    task.exclude '**/R$*.class'
-    artifacts.add('archives', task)
-}
+//android.libraryVariants.all { variant ->
+//    def name = variant.buildType.name.capitalize()
+//    def task = project.tasks.create "jar${name}", Jar
+//    task.dependsOn variant.javaCompiler
+//    task.from variant.javaCompiler.destinationDir
+//    task.exclude '**/BuildConfig.class'
+//    task.exclude '**/R.class'
+//    task.exclude '**/R$*.class'
+//    artifacts.add('archives', task)
+//}
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
