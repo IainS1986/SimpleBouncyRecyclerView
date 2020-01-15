@@ -12,7 +12,7 @@ ext {
     issueUrl = 'https://github.com/IainS1986/SimpleBouncyRecyclerView/issues'
     gitUrl = 'https://github.com/IainS1986/SimpleBouncyRecyclerView.git'
 
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.3'
 
     developerId = 'iains1986'
     developerName = 'Iain Stanford'
@@ -26,36 +26,7 @@ ext {
 // Maven
 apply plugin: 'com.github.dcendents.android-maven'
 
-//android.libraryVariants.all { variant ->
-//    def name = variant.buildType.name.capitalize()
-//    def task = project.tasks.create "jar${name}", Jar
-//    task.dependsOn variant.javaCompiler
-//    task.from variant.javaCompiler.destinationDir
-//    task.exclude '**/BuildConfig.class'
-//    task.exclude '**/R.class'
-//    task.exclude '**/R$*.class'
-//    artifacts.add('archives', task)
-//}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-//task javadoc(type: Javadoc) {
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//}
-
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
-//}
-
-artifacts {
-//    archives javadocJar
-    archives sourcesJar
-}
+group = publishedGroupId
 
 install {
     repositories.mavenInstaller {
@@ -96,8 +67,27 @@ install {
 // Bintray
 apply plugin: 'com.jfrog.bintray'
 
-group = publishedGroupId
 version = libraryVersion
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//}
+//
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+
+artifacts {
+//    archives javadocJar
+    archives sourcesJar
+}
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
