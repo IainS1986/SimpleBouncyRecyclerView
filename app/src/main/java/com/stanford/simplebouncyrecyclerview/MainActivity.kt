@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stanford.simplebouncyrecyclerview.data.Movie
 
@@ -39,16 +38,13 @@ class MainActivity : AppCompatActivity() {
         _recyclerView = findViewById(R.id.list_view)
 
         _recyclerView.apply {
-
-//            layoutManager = LinearLayoutManager(context)
             adapter = ListAdapter(_cageMovies)
-
         }
     }
 }
 
 class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item, parent, false)) {
+    BaseViewHolder(R.layout.list_item, inflater, parent) {
 
     private var _titleView: TextView? = null
     private var _yearView: TextView? = null
@@ -58,25 +54,79 @@ class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         _yearView = itemView.findViewById(R.id.list_description)
     }
 
-    fun bind(movie: Movie) {
+    override fun bind(movie: Movie) {
         _titleView?.text = movie.title
         _yearView?.text = movie.year.toString()
     }
 
 }
 
-class ListAdapter(private var list: List<Movie>) :
-        RecyclerView.Adapter<MovieViewHolder>() {
+class MovieHeaderViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    BaseViewHolder(R.layout.list_header, inflater, parent) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return MovieViewHolder(inflater, parent)
+    override fun bind(movie: Movie) {
     }
 
-    override fun getItemCount(): Int = list.size
+}
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie: Movie = list[position]
+class MovieFooterViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    BaseViewHolder(R.layout.list_footer, inflater, parent) {
+
+    override fun bind(movie: Movie) {
+    }
+
+}
+
+abstract class BaseViewHolder(resource: Int, inflater: LayoutInflater, parent: ViewGroup) :
+    RecyclerView.ViewHolder(inflater.inflate(resource, parent, false)) {
+
+    abstract fun bind(movie: Movie)
+}
+
+
+class ListAdapter(private var list: List<Movie>) :
+    RecyclerView.Adapter<BaseViewHolder>() {
+
+    var headerEnabled: Boolean = true
+    var footerEnabled: Boolean = true
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            R.layout.list_header -> MovieHeaderViewHolder(inflater, parent)
+            R.layout.list_footer -> MovieFooterViewHolder(inflater, parent)
+            else -> MovieViewHolder(inflater, parent)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (headerEnabled && position == 0)
+        {
+            return R.layout.list_header
+        }
+
+        if (footerEnabled && position == itemCount - 1)
+        {
+            return R.layout.list_footer
+        }
+
+        return R.layout.list_item
+    }
+
+    override fun getItemCount(): Int = list.size + (if (headerEnabled) 1 else 0) + (if (footerEnabled) 1 else 0)
+
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        if (headerEnabled && position == 0)
+        {
+            return
+        }
+
+        if (footerEnabled && position == itemCount - 1)
+        {
+            return
+        }
+
+        val movie: Movie = list[position - if (headerEnabled) 1 else 0]
         holder.bind(movie)
     }
 
