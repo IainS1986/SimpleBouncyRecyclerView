@@ -1,0 +1,3 @@
+package com.stanford.simplebouncyrecyclerview.data
+
+interface ListItem

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         app:startIndexOffset="1"
         app:endIndexOffset="1"
-        app:startOverscrollColor="#00FF0000"
+        app:startOverscrollColor="#dddddd"
         app:endOverscrollColor="#000000FF"
         app:tension="1.0"
         app:strength="1.0"
