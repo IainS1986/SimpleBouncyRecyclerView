@@ -45,9 +45,11 @@ Once included in your apps gradle, usage is very simple. Just add a **com.stanfo
       android:layout_height="match_parent" />
 ```
 
-Thats it! By default, you should see your RecyclerView "bouncing".
+Thats it! By default, you should see your RecyclerView "bouncing". This works for both Vertical and Horizontal RecyclerViews.
 
-Note: Do **NOT** set the RecyclerView LayoutManager to something else, as that will remove the Bouncy support.
+```diff
+- Note: Do **NOT** set the RecyclerView LayoutManager to something else, as that will remove the Bouncy support.
+```
 
 The full optional settings would look like...
 
