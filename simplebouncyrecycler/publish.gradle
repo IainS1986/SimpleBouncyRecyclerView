@@ -12,7 +12,7 @@ ext {
     issueUrl = 'https://github.com/IainS1986/SimpleBouncyRecyclerView/issues'
     gitUrl = 'https://github.com/IainS1986/SimpleBouncyRecyclerView.git'
 
-    libraryVersion = '0.0.3'
+    libraryVersion = '0.0.4'
 
     developerId = 'iains1986'
     developerName = 'Iain Stanford'
