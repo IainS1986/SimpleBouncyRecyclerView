@@ -3,7 +3,7 @@ Super simple, basic, bouncy RecyclerView in Kotlin.
 
 This is in no-way the best sollution to this problem/feature, it was more just something I messed around with and wanted to test out sharing aac libraries via bintray too!
 
-![SimpleBouncyRecylerView](https://github.com/IainS1986/SimpleBouncyRecylerView/blob/master/docs/gifs/simple.gif)
+![SimpleBouncyRecylerView](https://github.com/IainS1986/SimpleBouncyRecyclerView/blob/master/docs/gifs/simple.gif)
 
 This is a simple, "bouncy" RecyclerView with a few extra features to help support some basic use cases. Its not physics based, its just a simple overscroll handler that animates back in place when released (touch up).
 
