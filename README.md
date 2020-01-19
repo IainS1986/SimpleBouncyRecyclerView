@@ -48,7 +48,7 @@ Once included in your apps gradle, usage is very simple. Just add a **com.stanfo
 Thats it! By default, you should see your RecyclerView "bouncing". This works for both Vertical and Horizontal RecyclerViews.
 
 ```diff
-- Note: Do **NOT** set the RecyclerView LayoutManager to something else, as that will remove the Bouncy support.
+- Note: Do NOT set the RecyclerView LayoutManager to something else.
 ```
 
 The full optional settings would look like...
