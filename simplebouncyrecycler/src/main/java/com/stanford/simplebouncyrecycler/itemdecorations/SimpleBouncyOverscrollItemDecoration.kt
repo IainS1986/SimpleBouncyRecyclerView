@@ -85,10 +85,10 @@ internal class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: At
         // Figure out the Width/Height to expand by
         if (_layoutManager.isVertical) {
             y = if (start) child.y - child.translationY - child.marginTop - fudge else child.y + child.measuredHeight + child.marginBottom + fudge
-            h = overscrollAmount.toFloat()
+            h = overscrollAmount.toFloat() + fudge
         } else {
             x = if (start) child.x - child.translationX - child.marginLeft - fudge else child.x + child.measuredWidth + child.marginRight + fudge
-            w = overscrollAmount.toFloat()
+            w = overscrollAmount.toFloat() + fudge
         }
 
         c.drawRect(x, y, x + w, y + h, _paint)

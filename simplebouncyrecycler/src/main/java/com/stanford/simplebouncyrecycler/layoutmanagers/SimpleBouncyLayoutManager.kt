@@ -52,16 +52,16 @@ internal class SimpleBouncyLayoutManager @JvmOverloads constructor(
             field = value
         }
 
-    private var _tension: Float = 1.0f
-    var tension: Float = 1.0f
-        get() = _tension
+    private var _friction: Float = 1.0f
+    var friction: Float = 1.0f
+        get() = _friction
         set(value) {
             field = value
         }
 
-    private var _strength: Float = 1.0f
-    var strength: Float = 1.0f
-        get() = _strength
+    private var _tension: Float = 1.0f
+    var tension: Float = 1.0f
+        get() = _tension
         set(value) {
             field = value
         }
@@ -81,8 +81,8 @@ internal class SimpleBouncyLayoutManager @JvmOverloads constructor(
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.bouncy_scroller)
 
+            _friction = a.getFloat(R.styleable.bouncy_scroller_friction, _friction)
             _tension = a.getFloat(R.styleable.bouncy_scroller_tension, _tension)
-            _strength = a.getFloat(R.styleable.bouncy_scroller_strength, _strength)
             _startIndexOffset = a.getInt(R.styleable.bouncy_scroller_startIndexOffset, _startIndexOffset)
             _endIndexOffset = a.getInt(R.styleable.bouncy_scroller_endIndexOffset, _endIndexOffset)
 
@@ -160,7 +160,7 @@ internal class SimpleBouncyLayoutManager @JvmOverloads constructor(
 
         val overscroll = toScroll - scrollRange;
         var dampen = if (_currentState == BouncyState.UP) 1.25 else 1.0 // Initial dampen, allow flings to fling further than a pull (over...fling the overscroll)
-        dampen -= kotlin.math.abs(_overscrollTotal) / (_maxOverscroll * (1.0 / tension)) // Alter the base dampen with our MaxOverscroll and Tension values
+        dampen -= kotlin.math.abs(_overscrollTotal) / (_maxOverscroll * (1.0 / friction)) // Alter the base dampen with our MaxOverscroll and Tension values
         updateOverscroll(overscroll * dampen)
 
         return scrollRange
@@ -213,7 +213,7 @@ internal class SimpleBouncyLayoutManager @JvmOverloads constructor(
 
         _bounceBackAnimator = ValueAnimator.ofFloat(_overscrollTotal.toFloat(), 0f)
         _bounceBackAnimator!!.interpolator = _bounceInterpolator
-        _bounceBackAnimator!!.duration = (_animDuration * (1.0f / strength)).toLong()
+        _bounceBackAnimator!!.duration = (_animDuration * (1.0f / tension)).toLong()
         _bounceBackAnimator!!.addUpdateListener { bounceBackUpdate(it.animatedValue as Float) }
         _bounceBackAnimator!!.addListener(onEnd = { bounceBackEnded() }, onCancel = { bounceBackEnded() })
         _bounceBackAnimator!!.start()

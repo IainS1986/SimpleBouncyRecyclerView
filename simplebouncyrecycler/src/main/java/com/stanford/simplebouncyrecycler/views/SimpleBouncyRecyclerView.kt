@@ -70,16 +70,16 @@ class SimpleBouncyRecyclerView @JvmOverloads constructor(
             _layoutManager.endIndexOffset = value
         }
 
-    var strength: Float
-        get() = _layoutManager.strength
-        set(value) {
-            _layoutManager.strength = value
-        }
-
     var tension: Float
         get() = _layoutManager.tension
         set(value) {
             _layoutManager.tension = value
+        }
+
+    var friction: Float
+        get() = _layoutManager.friction
+        set(value) {
+            _layoutManager.friction = value
         }
 
     fun registerOnOverscrollEvent(event: OverscrollEvent) {

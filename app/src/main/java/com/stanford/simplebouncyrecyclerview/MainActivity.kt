@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _recyclerView : RecyclerView
 
     private val _sectionsEnabled: Boolean = true
-    private val _headerEnabled: Boolean = false
-    private val _footerEnabled: Boolean = false
+    private val _headerEnabled: Boolean = true
+    private val _footerEnabled: Boolean = true
 
     private val _cageMovies = mutableListOf(
         Decade(1980),

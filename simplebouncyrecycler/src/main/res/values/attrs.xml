@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="bouncy_scroller">
+        <attr name="friction" format="float"/>
         <attr name="tension" format="float"/>
-        <attr name="strength" format="float"/>
         <attr name="startIndexOffset" format="integer"/>
         <attr name="endIndexOffset" format="integer"/>
         <attr name="startOverscrollColor" format="color"/>
