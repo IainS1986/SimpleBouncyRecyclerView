@@ -55,6 +55,7 @@ The full optional settings would look like...
 
 ```axml
 <com.stanford.simplebouncyrecycler.views.SimpleBouncyRecyclerView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
