@@ -5,7 +5,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
+import androidx.core.view.marginBottom
+import androidx.core.view.marginLeft
+import androidx.core.view.marginRight
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.stanford.simplebouncyrecycler.R
@@ -17,6 +22,8 @@ internal class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: At
     private var _paint: Paint = Paint()
 
     private var _layoutManager: SimpleBouncyLayoutManager = layoutManager
+
+    private var _context: Context? = context
 
     var startOverscrollColor: Int = Color.TRANSPARENT
 
@@ -69,13 +76,19 @@ internal class SimpleBouncyOverscrollItemDecoration(context: Context?, attrs: At
         var w = c.width.toFloat()
         var h = c.height.toFloat()
 
+        var overscrollAmount = kotlin.math.abs(_layoutManager.overscrollTotal)
+
+        // FUDGE : RecyclerViews are putting a single DP gap between cells so overscroll region just needs
+        // increading slightly
+        var fudge = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, _context!!.resources.displayMetrics)
+
         // Figure out the Width/Height to expand by
         if (_layoutManager.isVertical) {
-            y = if (start) child.y- child.translationY else child.y+ child.measuredHeight
-            h = kotlin.math.abs(child.translationY)
+            y = if (start) child.y - child.translationY - child.marginTop - fudge else child.y + child.measuredHeight + child.marginBottom + fudge
+            h = overscrollAmount.toFloat()
         } else {
-            x = if (start) child.x - child.translationX else child.x + child.measuredWidth
-            w = kotlin.math.abs(child.translationX)
+            x = if (start) child.x - child.translationX - child.marginLeft - fudge else child.x + child.measuredWidth + child.marginRight + fudge
+            w = overscrollAmount.toFloat()
         }
 
         c.drawRect(x, y, x + w, y + h, _paint)

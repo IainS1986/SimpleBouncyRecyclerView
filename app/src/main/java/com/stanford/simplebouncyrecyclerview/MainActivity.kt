@@ -14,7 +14,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var _recyclerView : RecyclerView
 
-    private val _cageMovies = listOf(
+    private val _sectionsEnabled: Boolean = true
+    private val _headerEnabled: Boolean = false
+    private val _footerEnabled: Boolean = false
+
+    private val _cageMovies = mutableListOf(
         Decade(1980),
         Movie("Raising Arizona", 1987),
         Movie("Vampire's Kiss", 1988),
@@ -41,10 +45,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (_sectionsEnabled == false) {
+            _cageMovies.removeAll { item -> item is Decade }
+        }
+
+        var listAdapter: ListAdapter = ListAdapter(_cageMovies)
+        listAdapter.footerEnabled = _footerEnabled
+        listAdapter.headerEnabled = _headerEnabled
+
         _recyclerView = findViewById(R.id.list_view)
 
         _recyclerView.apply {
-            adapter = ListAdapter(_cageMovies)
+            adapter = listAdapter
         }
     }
 }
