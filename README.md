@@ -3,7 +3,7 @@ Super simple, basic, bouncy RecyclerView in Kotlin.
 
 This is in no-way the best sollution to this problem/feature, it was more just something I messed around with and wanted to test out sharing aac libraries via bintray too!
 
-<img src="https://github.com/IainS1986/SimpleBouncyRecyclerView/blob/master/docs/gifs/simple.gif" width="250" hspace="44">
+<img src="https://github.com/IainS1986/SimpleBouncyRecyclerView/blob/master/docs/gifs/simple.gif" width="250" hspace="44"> <img src="https://github.com/IainS1986/SimpleBouncyRecyclerView/blob/master/docs/gifs/simple_horizontal.gif" width="250" hspace="44">
 
 This is a simple, "bouncy" RecyclerView with a few extra features to help support some basic use cases. Its not physics based, its just a simple overscroll handler that animates back in place when released (touch up).
 
@@ -50,6 +50,16 @@ Thats it! By default, you should see your RecyclerView "bouncing". This works fo
 ```diff
 - Note: Do NOT set the RecyclerView LayoutManager to something else.
 ```
+
+You can set Vertical/Horizontal scrolling via the 'orientation' attribute on the recyclerview itself, i.e.
+```axml
+<com.stanford.simplebouncyrecycler.views.SimpleBouncyRecyclerView
+      android:id="@+id/list_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal"/> //Additional orientation being set
+```
+
 
 The full optional settings would look like...
 
