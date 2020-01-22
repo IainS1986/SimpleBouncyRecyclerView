@@ -10,16 +10,17 @@
     <com.stanford.simplebouncyrecycler.views.SimpleBouncyRecyclerView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:startIndexOffset="2"
-        app:endIndexOffset="1"
-        app:startOverscrollColor="#dddddd"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:startIndexOffset="0"
+        app:endIndexOffset="0"
+        app:startOverscrollColor="#00dddddd"
         app:endOverscrollColor="#000000FF"
         app:friction="1.0"
         app:tension="1.0"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

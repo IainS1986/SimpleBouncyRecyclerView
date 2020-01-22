@@ -14,9 +14,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var _recyclerView : RecyclerView
 
-    private val _sectionsEnabled: Boolean = true
-    private val _headerEnabled: Boolean = true
-    private val _footerEnabled: Boolean = true
+    private val _sectionsEnabled: Boolean = false
+    private val _headerEnabled: Boolean = false
+    private val _footerEnabled: Boolean = false
 
     private val _cageMovies = mutableListOf(
         Decade(1980),
@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         var listAdapter: ListAdapter = ListAdapter(_cageMovies)
         listAdapter.footerEnabled = _footerEnabled
         listAdapter.headerEnabled = _headerEnabled
+        listAdapter.isVertical = true
 
         _recyclerView = findViewById(R.id.list_view)
 
@@ -61,8 +62,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-    BaseViewHolder(R.layout.list_item, inflater, parent) {
+class MovieViewHolder(isVertical: Boolean, inflater: LayoutInflater, parent: ViewGroup) :
+    BaseViewHolder(if (isVertical) R.layout.list_item else R.layout.list_item_horizontal, inflater, parent) {
 
     private var _titleView: TextView? = null
     private var _yearView: TextView? = null
@@ -124,6 +125,7 @@ class ListAdapter(private var list: List<ListItem>) :
 
     var headerEnabled: Boolean = true
     var footerEnabled: Boolean = true
+    var isVertical: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -131,7 +133,7 @@ class ListAdapter(private var list: List<ListItem>) :
             R.layout.list_header -> MovieHeaderViewHolder(inflater, parent)
             R.layout.list_footer -> MovieFooterViewHolder(inflater, parent)
             R.layout.list_section -> MovieSectionViewHolder(inflater, parent)
-            else -> MovieViewHolder(inflater, parent)
+            else -> MovieViewHolder(isVertical, inflater, parent)
         }
     }
 
